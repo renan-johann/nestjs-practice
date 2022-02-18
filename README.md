@@ -96,3 +96,14 @@ $ npm run test:cov
 - Usar o Nest.js sem TypeScript
 - Não organizar a aplicação utilizando as convenções do framework.
 - Achas que resolverá todos os problemas para criação de aplicações WEB ou de microsserviços
+
+```mermaid
+
+graph TD
+A[Example] -->|Get money| B(Go shopping)
+B --> C{Let me think}
+C -->|One| D[Laptop]
+C -->|Two| E[iPhone]
+C -->|Three| F[fa:fa-car Car]
+
+```
