@@ -9,7 +9,6 @@ import {
   HttpCode,
   NotFoundException,
 } from '@nestjs/common';
-import { Message } from './Message';
 import { MessageDto } from './MessageDto';
 import { MessagesService } from './messages.service';
 
@@ -35,13 +34,16 @@ export class MessagesController {
   }
 
   @Put(':id')
-  update(@Param() params, @Body() message: Message) {
-    return this.messagesService.update(+params.id, message);
+  update(@Param() params, @Body() messageDto: MessageDto) {
+    return this.messagesService.update(+params.id, messageDto).catch((e) => {
+      throw new NotFoundException(e.message);
+    });
   }
 
-  @HttpCode(204)
   @Delete(':id')
   delete(@Param() params) {
-    return this.messagesService.delete(+params.id);
+    return this.messagesService.delete(+params.id).catch((e) => {
+      throw new NotFoundException(e.message);
+    });
   }
 }
