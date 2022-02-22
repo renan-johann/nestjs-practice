@@ -107,3 +107,15 @@ C -->|Two| E[iPhone]
 C -->|Three| F[fa:fa-car Car]
 
 ```
+
+#### Install Docker Compose on Ubuntu
+
+```
+sudo apt install docker-compose
+```
+
+Now, to verify it is installed on yout system, type the command in terminal:
+
+```
+docker-compose version
+```

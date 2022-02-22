@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  database:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_db
+      - POSTGRES_USER=renan
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
