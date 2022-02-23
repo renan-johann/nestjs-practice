@@ -1,26 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { Message } from './Message';
 import { MessageDto } from './MessageDto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MessageEntity } from './message.entity';
 
 @Injectable()
 export class MessagesService {
-  private messages: Message[] = [
-    {
-      id: 1,
-      text: 'Primeira mensagem',
-    },
-    {
-      id: 2,
-      text: 'Segunda mensagem',
-    },
-  ];
+  constructor(
+    @InjectRepository(MessageEntity)
+    private messagesRepo: Repository<MessageEntity>,
+  ) {}
 
   findAll() {
-    return this.messages.filter(Boolean);
+    return this.messagesRepo.find();
   }
 
   async findById(id: number) {
-    const message = this.messages.find((msg) => msg?.id === id); // Safe Navigation (?.) Operator
+    const message = this.messagesRepo.findOne(id); // Safe Navigation (?.) Operator
     if (!message) {
       throw Error(`Mensagem com o ID '${id}' não encontrado.`);
     }
@@ -28,40 +24,32 @@ export class MessagesService {
   }
 
   create(messageDto: MessageDto) {
-    const id = this.messages.length + 1;
-    const message: Message = {
-      id,
-      ...messageDto, // Spread operator JavaScript
-    };
-
-    this.messages.push(message);
-
-    return message;
+    const newMessage = this.messagesRepo.create(messageDto);
+    return this.messagesRepo.save(newMessage);
   }
 
   async update(id: number, messageDto: MessageDto) {
-    const index = this.messages.findIndex((msg) => msg?.id === id); // Safe Navigation (?.) Operator
+    const message = await this.messagesRepo.findOne(id); // Safe Navigation (?.) Operator
 
-    if (index < 0) {
-      throw Error(`Mensagem com o ID '${id}' não encontrado.`);
-    }
+    // if (index < 0) {
+    //   throw Error(`Mensagem com o ID '${id}' não encontrado.`);
+    // }
 
-    const message: Message = {
-      id,
-      ...messageDto, // Spread operator JavaScript
-    };
+    // const message: Message = {
+    //   id,
+    //   ...messageDto, // Spread operator JavaScript
+    // };
 
-    this.messages[index] = message;
-    return message;
+    this.messagesRepo.merge(message, messageDto);
+    return this.messagesRepo.save(message);
   }
 
   async delete(id: number) {
-    const index = this.messages.findIndex((msg) => msg?.id === id);
+    // if (index < 0) {
+    //   throw Error(`Mensagem com o ID '${id}' não encontrado.`);
+    // }
 
-    if (index < 0) {
-      throw Error(`Mensagem com o ID '${id}' não encontrado.`);
-    }
-
-    delete this.messages[index];
+    await this.messagesRepo.delete(id);
+    return true;
   }
 }

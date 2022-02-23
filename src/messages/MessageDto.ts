@@ -1,7 +1,9 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class MessageDto {
   @IsString() // https://github.com/typestack/class-validator
-  @IsNotEmpty()
   text: string;
+
+  @IsBoolean()
+  completed: boolean;
 }
